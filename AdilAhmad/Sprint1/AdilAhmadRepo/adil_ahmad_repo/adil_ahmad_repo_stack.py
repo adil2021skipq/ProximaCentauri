@@ -4,7 +4,12 @@ from aws_cdk import (
     aws_events as events_,
     aws_events_targets as targets_,
     aws_iam,
+    aws_cloudwatch as cloudwatch_,
+    aws_sns as sns,
+    aws_sns_subscriptions as subscriptions_,
+    aws_cloudwatch_actions as cw_actions,
 )
+from resources import constants as constants
 
 class AdilAhmadRepoStack(cdk.Stack):
 
@@ -15,7 +20,45 @@ class AdilAhmadRepoStack(cdk.Stack):
         lambda_schedule=events_.Schedule.rate(cdk.Duration.minutes(1)) 
         lambda_targets= targets_.LambdaFunction(handler=Hwlambda)
         rule=events_.Rule(self, "webhealth_Invocation", description="Periodic Lambda", enabled=True, schedule=lambda_schedule, targets=[lambda_targets])
+        
+        topic = sns.Topic(self, "WebHealthTopic")
+        topic.add_subscription(subscriptions_.EmailSubscription(email_address="adil.ahmad.s@skipq.org"))
+        
+        dimensions={"URL": constants.URL_TO_MONITOR, "Region": "DUB"}
+        availability_metric=cloudwatch_.Metric(namespace=constants.URL_MONITOR_NAMESPACE, 
+        metric_name=constants.URL_MONITOR_NAME_AVAILABILITY, 
+        dimensions_map=dimensions, 
+        period=cdk.Duration.minutes(1),
+        label="Availability Metric"
+        )
+        availability_alarm=cloudwatch_.Alarm(self, 
+            id="AvailabilityAlarm", 
+            metric=availability_metric,
+            comparison_operator=cloudwatch_.ComparisonOperator.LESS_THAN_THRESHOLD,
+            datapoints_to_alarm=1,
+            evaluation_periods=1,
+            threshold=1
+        )
     
+        dimensions={"URL": constants.URL_TO_MONITOR, "Region": "DUB"}
+        latency_metric=cloudwatch_.Metric(namespace=constants.URL_MONITOR_NAMESPACE,
+        metric_name=constants.URL_MONITOR_NAME_LATENCY, 
+        dimensions_map=dimensions,
+        period=cdk.Duration.minutes(1),
+        label="Latency Metric"
+        )
+        latency_alarm=cloudwatch_.Alarm(self, 
+            id="LatencyAlarm", 
+            metric=latency_metric,
+            comparison_operator=cloudwatch_.ComparisonOperator.GREATER_THAN_THRESHOLD,
+            datapoints_to_alarm=1,
+            evaluation_periods=1,
+            threshold=0.265
+        )    
+        
+        availability_alarm.add_alarm_action(cw_actions.SnsAction(topic))
+        latency_alarm.add_alarm_action(cw_actions.SnsAction(topic))
+        
     def create_lambda_role(self):
         lambdaRole=aws_iam.Role(self, "lambda-role",
         assumed_by=aws_iam.ServicePrincipal("lambda.amazonaws.com"),
