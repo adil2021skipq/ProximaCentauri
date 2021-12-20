@@ -4,6 +4,18 @@ import constants as constants
 from cloudwatch_putMetric import cloudwatchPutMetric
 
 def lambda_handler(events, context):
+    # for url in bs3.read_file("s3_bucket", "id"):
+    #     avail=get_availability(url)
+    #     latency=get_latency(url)
+    #     values.update({"availability "+url: avail, "latency "+url: latency})
+    
+    #     dimensions=[
+    #     {"Name": "URL", "Value":url},
+    #     {"Name": "Region", "Value": "DUB"}
+    #     ]
+    #     cw.put_data(constants.URL_MONITOR_NAMESPACE, constants.URL_MONITOR_NAME_AVAILABILITY, dimensions, avail)
+    
+    #     cw.put_data(constants.URL_MONITOR_NAMESPACE, constants.URL_MONITOR_NAME_LATENCY, dimensions, latency)
     values=dict()
     cw = cloudwatchPutMetric()
     
@@ -19,6 +31,7 @@ def lambda_handler(events, context):
     
     values.update({"availability": avail, "latency": latency})
     return values
+
 
 def get_availability():
     http=urllib3.PoolManager()
@@ -37,5 +50,4 @@ def get_latency():
     delta=end-start
     latencySec=round(delta.microseconds * 0.000001, 6)
     return latencySec
-    
     
