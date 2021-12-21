@@ -21,9 +21,8 @@ class AdilAhmadRepoStack(cdk.Stack):
     def __init__(self, scope: cdk.Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
         lambda_role=self.create_lambda_role()
-        table_role=self.create_db_lambda_role()
         Hwlambda=self.create_lambda("HelloLambda", "./resources", "webhealth_lambda.lambda_handler", lambda_role)
-        DBlambda=self.create_lambda("DynamoDBLambda", "./resources", "DynamoDB_lambda.lambda_handler", table_role)
+        DBlambda=self.create_lambda("DynamoDBLambda", "./resources", "DynamoDB_lambda.lambda_handler", lambda_role)
         
         lambda_schedule=events_.Schedule.rate(cdk.Duration.minutes(1)) 
         lambda_targets= targets_.LambdaFunction(handler=Hwlambda)
@@ -70,20 +69,20 @@ class AdilAhmadRepoStack(cdk.Stack):
             comparison_operator=cloudwatch_.ComparisonOperator.GREATER_THAN_THRESHOLD,
             datapoints_to_alarm=1,
             evaluation_periods=1,
-            threshold=0.245
+            threshold=constants.THRESHOLD
         )    
         
         availability_alarm.add_alarm_action(cw_actions.SnsAction(topic))
         latency_alarm.add_alarm_action(cw_actions.SnsAction(topic))
         
-        bucket=s3_.Bucket(self, "Bucket")
-        queue=sqs_.Queue(self, "Queue", visibility_timeout=cdk.Duration.seconds(250))
-        bucket.add_event_notification( s3_.EventType.OBJECT_CREATED, s3n.SqsDestination(queue))
-        
+        bucket = s3_.Bucket(self, "AdilBucket")
         
     def create_lambda_role(self):
-        lambdaRole=aws_iam.Role(self, "lambda-role",
-        assumed_by=aws_iam.ServicePrincipal("lambda.amazonaws.com"),
+        lambdaRole = aws_iam.Role(self, "lambda-role-db",
+                        assumed_by=aws_iam.CompositePrincipal(
+                                    aws_iam.ServicePrincipal("lambda.amazonaws.com"),
+                                    aws_iam.ServicePrincipal("sns.amazonaws.com")
+                        ),
         managed_policies=[
             aws_iam.ManagedPolicy.from_aws_managed_policy_name("service-role/AWSLambdaBasicExecutionRole"),
             aws_iam.ManagedPolicy.from_aws_managed_policy_name("CloudWatchFullAccess"),
@@ -105,15 +104,6 @@ class AdilAhmadRepoStack(cdk.Stack):
         return db.Table(self, 
         id="Table", 
         table_name="AdilAhmadAlarmTable", 
-        partition_key=db.Attribute(name="id", type=db.AttributeType.STRING)
+        partition_key=db.Attribute(name="id", type=db.AttributeType.STRING),
+        sort_key=db.Attribute(name="createdDate", type=db.AttributeType.STRING)
         )
-        
-    def create_db_lambda_role(self):
-        lambdaRole = aws_iam.Role(self, "lambda-role-db",
-                        assumed_by = aws_iam.ServicePrincipal('lambda.amazonaws.com'),
-                        managed_policies=[
-                            aws_iam.ManagedPolicy.from_aws_managed_policy_name('service-role/AWSLambdaBasicExecutionRole'),
-                            aws_iam.ManagedPolicy.from_aws_managed_policy_name('AmazonDynamoDBFullAccess'),
-                            aws_iam.ManagedPolicy.from_aws_managed_policy_name('AmazonSNSFullAccess')
-                        ])
-        return lambdaRole
