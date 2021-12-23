@@ -43,19 +43,19 @@ class AdilAhmadRepoStack(cdk.Stack):
         
         ### TO CREATE THE BUCKET ###
         
-        # bucket = s3_.Bucket(self, id="AdilSkip1Bucket", bucket_name="adilskip1bucket")
-        # s3 = boto3.resource('s3')
-        # object = s3.Object('adilskipbucket','urls.json')
-        # response = object.put(Body=json.dumps({
-        #         "URLS": [
-        #     {
-        #     "FACEBOOK": "www.facebook.com",
-        #     "TWITTER": "www.twitter.com",
-        #     "ESPNCRICINFO": "www.espncricinfo.com",
-        #     "REDDIT": "www.reddit.com",
-        #     }
-        # ]
-        # }))
+        bucket = s3_.Bucket(self, id="AdilSkip1Bucket", bucket_name="adilskip1bucket")
+        s3 = boto3.resource('s3')
+        object = s3.Object('adilahmadbucket','urls.json')
+        response = object.put(Body=json.dumps({
+                "URLS": [
+            {
+            "FACEBOOK": "www.facebook.com",
+            "TWITTER": "www.twitter.com",
+            "ESPNCRICINFO": "www.espncricinfo.com",
+            "REDDIT": "www.reddit.com",
+            }
+        ]
+        }))
         URLS = s3b('adilskip1bucket').load('urls.json')
         K=list(URLS['URLS'][0].keys())
         
