@@ -12,8 +12,8 @@ class MyPipelineStack(core.Stack):
         trigger=cpactions.GitHubTrigger.POLL)
         
         synth = pipelines.ShellStep("synth", input = source,
-        commands = ["cd AdilAhmad/Sprint1/AdilAhmadRepo", "pip install -r requirements.txt", "npm install -g aws-cdk", "cdk synth"],
-        primary_output_directory = "AdilAhmad/Sprint1/AdilAhmadRepo/cdk.out")
+        commands = ["cd AdilAhmad/Sprint2/AdilAhmadRepo", "pip install -r requirements.txt", "npm install -g aws-cdk", "cdk synth"],
+        primary_output_directory = "AdilAhmad/Sprint2/AdilAhmadRepo/cdk.out")
         
         pipeline = pipelines.CodePipeline(self, "Pipeline", synth = synth)
         
