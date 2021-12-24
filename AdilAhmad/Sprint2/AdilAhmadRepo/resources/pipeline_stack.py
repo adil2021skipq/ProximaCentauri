@@ -1,5 +1,6 @@
 from aws_cdk import core
-from aws_cdk import pipelines, aws_iam
+from aws_cdk import pipelines
+from aws_cdk import aws_iam
 from aws_cdk import aws_codepipeline_actions as cpactions
 from resources.pipeline_stage import Pipeline_Stage
 
@@ -19,7 +20,7 @@ class MyPipelineStack(core.Stack):
         
         synth = pipelines.CodeBuildStep('synth',input=source,
         commands=["cd AdilAhmad/Sprint2/AdilAhmadRepo","pip install -r requirements.txt", "npm install -g aws-cdk", "cdk-synth"],
-        primary_output_directory="shanawar/sprint2/cdk.out",
+        primary_output_directory="AdilAhmad/Sprint2/AdilAhmadRepo/cdk.out",
         role=pipelineroles
         )
         
@@ -46,6 +47,7 @@ class MyPipelineStack(core.Stack):
             aws_iam.ManagedPolicy.from_aws_managed_policy_name("AwsCloudFormationFullAccess"),
             aws_iam.ManagedPolicy.from_aws_managed_policy_name("AmazonSSMFullAccess"),
             aws_iam.ManagedPolicy.from_aws_managed_policy_name("AWSCodePipeline_FullAccess"),
-            aws_iam.ManagedPolicy.from_aws_managed_policy_name("AmazonS3FullAccess")
+            aws_iam.ManagedPolicy.from_aws_managed_policy_name("AmazonS3FullAccess"),
+            aws_iam.ManagedPolicy.from_aws_managed_policy_name("AmazonEC2RoleForSSM")
             ])
         return role 

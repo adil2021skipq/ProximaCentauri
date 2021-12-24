@@ -7,5 +7,5 @@ from resources.pipeline_stack import MyPipelineStack
 
 app = core.App()
 
-MyPipelineStack(app, "Adil1Pipeline", env = cdk.Environment(account="315997497220", region="us-east-2"))
+MyPipelineStack(app, "AdilSkipPipeline", env = cdk.Environment(account="315997497220", region="us-east-2"))
 app.synth()
