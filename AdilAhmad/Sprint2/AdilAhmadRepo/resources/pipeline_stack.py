@@ -38,7 +38,7 @@ class MyPipelineStack(core.Stack):
             "region":"us-east-2"
         },
         pre=[
-            pipelines.manualApprovalStep("PromoteToProd")    
+            pipelines.ManualApprovalStep("PromoteToProd")    
         ])
         
         unit_test = pipelines.ShellStep("unit_test",
