@@ -62,57 +62,57 @@ class AdilAhmadRepoStack(cdk.Stack):
         # availability_metric = []
         # latency_metric = []
         
-        for i in range(len(K)):
+        # for i in range(len(K)):
             
-            dimensions = {'URL': URLS['URLS'][0][K[i]]}
-            availability_metric.append(
-                                cloudwatch_.Metric(namespace = constants.URL_MONITOR_NAMESPACE,
-                                metric_name=constants.URL_MONITOR_NAME_AVAILABILITY,
-                                dimensions_map = dimensions,
-                                period = cdk.Duration.minutes(5),
-                                label = f'{K[i]} Availability Metric')
-                                )
+        #     dimensions = {'URL': URLS['URLS'][0][K[i]]}
+        #     availability_metric.append(
+        #                         cloudwatch_.Metric(namespace = constants.URL_MONITOR_NAMESPACE,
+        #                         metric_name=constants.URL_MONITOR_NAME_AVAILABILITY,
+        #                         dimensions_map = dimensions,
+        #                         period = cdk.Duration.minutes(5),
+        #                         label = f'{K[i]} Availability Metric')
+        #                         )
                         
-            latency_metric.append(
-                                cloudwatch_.Metric(namespace = constants.URL_MONITOR_NAMESPACE,
-                                metric_name=constants.URL_MONITOR_NAME_LATENCY,
-                                dimensions_map = dimensions,
-                                period = cdk.Duration.minutes(1),
-                                label = f'{K[i]} Latency Metric')
-                                )
+        #     latency_metric.append(
+        #                         cloudwatch_.Metric(namespace = constants.URL_MONITOR_NAMESPACE,
+        #                         metric_name=constants.URL_MONITOR_NAME_LATENCY,
+        #                         dimensions_map = dimensions,
+        #                         period = cdk.Duration.minutes(1),
+        #                         label = f'{K[i]} Latency Metric')
+        #                         )
 
-        availability_alarm = []
-        latency_alarm = []
+        # availability_alarm = []
+        # latency_alarm = []
         
-        for i in range(len(K)):
+        # for i in range(len(K)):
             
-            availability_alarm.append(
-                                    cloudwatch_.Alarm(self, 
-                                    id = f'Adil Ahmad_{K[i]}_Availability_Alarm',
-                                    alarm_description = f"Alarm to monitor availability of {K[i]}",
-                                    alarm_name = f'Adil Ahmad {K[i]} Availability Alarm',
-                                    metric = availability_metric[i],
-                                    comparison_operator =cloudwatch_.ComparisonOperator.LESS_THAN_THRESHOLD,
-                                    datapoints_to_alarm = 1,
-                                    evaluation_periods = 1,
-                                    threshold = 1)
-                                    )
+        #     availability_alarm.append(
+        #                             cloudwatch_.Alarm(self, 
+        #                             id = f'Adil Ahmad_{K[i]}_Availability_Alarm',
+        #                             alarm_description = f"Alarm to monitor availability of {K[i]}",
+        #                             alarm_name = f'Adil Ahmad {K[i]} Availability Alarm',
+        #                             metric = availability_metric[i],
+        #                             comparison_operator =cloudwatch_.ComparisonOperator.LESS_THAN_THRESHOLD,
+        #                             datapoints_to_alarm = 1,
+        #                             evaluation_periods = 1,
+        #                             threshold = 1)
+        #                             )
                                     
-            latency_alarm.append(
-                                    cloudwatch_.Alarm(self, 
-                                    id = f'Adil Ahmad_{K[i]}_Latency_Alarm',
-                                    alarm_description = f"Alarm to monitor latency of {K[i]}",
-                                    alarm_name = f'Adil Ahmad {K[i]} Latency Alarm',
-                                    metric = latency_metric[i],
-                                    comparison_operator =cloudwatch_.ComparisonOperator.GREATER_THAN_THRESHOLD,
-                                    datapoints_to_alarm = 1,
-                                    evaluation_periods = 1,
-                                    threshold = 0.245)
-                                )
-        for i in range(len(K)):
+        #     latency_alarm.append(
+        #                             cloudwatch_.Alarm(self, 
+        #                             id = f'Adil Ahmad_{K[i]}_Latency_Alarm',
+        #                             alarm_description = f"Alarm to monitor latency of {K[i]}",
+        #                             alarm_name = f'Adil Ahmad {K[i]} Latency Alarm',
+        #                             metric = latency_metric[i],
+        #                             comparison_operator =cloudwatch_.ComparisonOperator.GREATER_THAN_THRESHOLD,
+        #                             datapoints_to_alarm = 1,
+        #                             evaluation_periods = 1,
+        #                             threshold = 0.245)
+        #                         )
+        # for i in range(len(K)):
             
-            availability_alarm[i].add_alarm_action(cw_actions.SnsAction(topic))
-            latency_alarm[i].add_alarm_action(cw_actions.SnsAction(topic))
+        #     availability_alarm[i].add_alarm_action(cw_actions.SnsAction(topic))
+        #     latency_alarm[i].add_alarm_action(cw_actions.SnsAction(topic))
         
     def create_lambda_role(self):
         lambdaRole = aws_iam.Role(self, "lambda-role-db",
