@@ -43,9 +43,9 @@ class AdilAhmadRepoStack(cdk.Stack):
         
         # ### TO CREATE THE BUCKET ###
         
-        # # bucket = s3_.Bucket(self, id="AdilAhmadBucket", bucket_name="adilahmadbucket")
+        # bucket = s3_.Bucket(self, id="AdilBucket", bucket_name="adilbucket")
         # s3 = boto3.resource('s3')
-        # object = s3.Object('adilahmadbucket','urls.json')
+        # object = s3.Object('adilbucket','urls.json')
         # response = object.put(Body=json.dumps({
         #         "URLS": [
         #     {
@@ -56,7 +56,7 @@ class AdilAhmadRepoStack(cdk.Stack):
         #     }
         # ]
         # }))
-        # URLS = s3b('adilahmadbucket').load('urls.json')
+        # URLS = s3b('adilbucket').load('urls.json')
         # K=list(URLS['URLS'][0].keys())
         
         # availability_metric = []
