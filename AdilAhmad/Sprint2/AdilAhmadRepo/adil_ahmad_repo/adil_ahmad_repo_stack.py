@@ -43,24 +43,24 @@ class AdilAhmadRepoStack(cdk.Stack):
         
         ### TO CREATE THE BUCKET ###
         
-        # bucket = s3_.Bucket(self, id="AdilAhmadBucket", bucket_name="adilahmadbucket")
-        s3 = boto3.resource('s3')
-        object = s3.Object('adilahmadbucket','urls.json')
-        response = object.put(Body=json.dumps({
-                "URLS": [
-            {
-            "FACEBOOK": "www.facebook.com",
-            "TWITTER": "www.twitter.com",
-            "ESPNCRICINFO": "www.espncricinfo.com",
-            "REDDIT": "www.reddit.com",
-            }
-        ]
-        }))
-        URLS = s3b('adilahmadbucket').load('urls.json')
-        K=list(URLS['URLS'][0].keys())
+        bucket = s3_.Bucket(self, id="AdilAhmadBucket", bucket_name="adilahmadbucket")
+        # s3 = boto3.resource('s3')
+        # object = s3.Object('adilahmadbucket','urls.json')
+        # response = object.put(Body=json.dumps({
+        #         "URLS": [
+        #     {
+        #     "FACEBOOK": "www.facebook.com",
+        #     "TWITTER": "www.twitter.com",
+        #     "ESPNCRICINFO": "www.espncricinfo.com",
+        #     "REDDIT": "www.reddit.com",
+        #     }
+        # ]
+        # }))
+        # URLS = s3b('adilahmadbucket').load('urls.json')
+        # K=list(URLS['URLS'][0].keys())
         
-        availability_metric = []
-        latency_metric = []
+        # availability_metric = []
+        # latency_metric = []
         
         for i in range(len(K)):
             
