@@ -20,4 +20,4 @@ class Pipeline_Stage(cdk.Stage):
     def __init__(self, scope: cdk.Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
         
-        infra_stack = AdilAhmadRepoStack(self, "adil-ahmad-stack")
+        infra_stack = AdilAhmadRepoStack(self, "adil-ahmad-skip-stack")
