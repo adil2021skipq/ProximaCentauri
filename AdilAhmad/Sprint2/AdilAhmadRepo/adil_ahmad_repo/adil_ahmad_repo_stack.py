@@ -15,7 +15,7 @@ from aws_cdk import (
 )
 from resources import constants as constants
 import boto3, json
-from resources.s3bucket import S3Bucket as s3b
+# from resources.s3bucket import S3Bucket as s3b
 
 class AdilAhmadRepoStack(cdk.Stack):
 
