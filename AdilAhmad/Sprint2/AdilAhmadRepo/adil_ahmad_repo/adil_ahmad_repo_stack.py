@@ -29,17 +29,17 @@ class AdilAhmadRepoStack(cdk.Stack):
         lambda_targets= targets_.LambdaFunction(handler=Hwlambda)
         rule=events_.Rule(self, "webhealth_Invocation", description="Periodic Lambda", enabled=True, schedule=lambda_schedule, targets=[lambda_targets])
         
-        d = boto3.client("dynamodb")
-        dnm = boto3.resource("dynamodb")
-        response=d.list_tables()
-        if ("AdilAhmadAlarmTable" in response["TableNames"]):
-            dynamo_table=dnm.Table('AdilAhmadAlarmTable')
-        else:
-            dynamo_table=self.create_table()
+        # d = boto3.client("dynamodb")
+        # dnm = boto3.resource("dynamodb")
+        # response=d.list_tables()
+        # if ("AdilAhmadAlarmTable" in response["TableNames"]):
+        #     dynamo_table=dnm.Table('AdilAhmadAlarmTable')
+        # else:
+        #     dynamo_table=self.create_table()
         
-        topic = sns.Topic(self, "WebHealthTopic")
-        topic.add_subscription(subscriptions_.EmailSubscription(email_address="adil.ahmad.s@skipq.org"))
-        topic.add_subscription(subscriptions_.LambdaSubscription(fn=DBlambda))
+        # topic = sns.Topic(self, "WebHealthTopic")
+        # topic.add_subscription(subscriptions_.EmailSubscription(email_address="adil.ahmad.s@skipq.org"))
+        # topic.add_subscription(subscriptions_.LambdaSubscription(fn=DBlambda))
         
         ### TO CREATE THE BUCKET ###
         
