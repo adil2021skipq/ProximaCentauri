@@ -38,8 +38,13 @@ class MyPipelineStack(core.Stack):
             "region":"us-east-2"
         })
         
-        unit_test = pipelines.ShellStep("unit_test",
-        commands = ["cd AdilAhmad/Sprint2/AdilAhmadRepo", "pip install -r requirements.txt", "pytest unit", "pytest integ"]
+        # unit_test = pipelines.ShellStep("unit_test",
+        # commands = ["cd AdilAhmad/Sprint2/AdilAhmadRepo", "pip install -r requirements.txt", "pytest unit", "pytest integ"]
+        # )
+        
+        unit_test = pipelines.CodeBuildStep('unit_test',
+        commands=["cd AdilAhmad/Sprint2/AdilAhmadRepo","pip install -r requirements.txt", "pytest unit", "pytest integ"],
+        role=pipelineroles
         )
         
         pipeline.add_stage(beta, 
