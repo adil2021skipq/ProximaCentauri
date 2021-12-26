@@ -35,7 +35,7 @@ class AdilAhmadRepoStack(cdk.Stack):
         # if ("AdilAhmadAlarmTable" in response["TableNames"]):
         # dynamo_table=dnm.Table('AdilAhmadAlarmTable')
         # else:
-        dynamo_table=self.create_table()
+        # dynamo_table=self.create_table()
         
         # topic = sns.Topic(self, "WebHealthTopic")
         # topic.add_subscription(subscriptions_.EmailSubscription(email_address="adil.ahmad.s@skipq.org"))
