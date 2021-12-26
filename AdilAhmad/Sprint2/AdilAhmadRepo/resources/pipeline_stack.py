@@ -36,10 +36,7 @@ class MyPipelineStack(core.Stack):
         env={
             "account":"315997497220",
             "region":"us-east-2"
-        },
-        pre=[
-            pipelines.ManualApprovalStep("PromoteToProd")    
-        ])
+        })
         
         unit_test = pipelines.ShellStep("unit_test",
         commands = ["cd AdilAhmad/Sprint2/AdilAhmadRepo", "pip install -r requirements.txt", "pytest unit", "pytest integ"]
@@ -47,6 +44,10 @@ class MyPipelineStack(core.Stack):
         
         pipeline.add_stage(beta, 
         pre = [unit_test])
+        pipeline.add_stage(prod,
+        pre=[
+            pipelines.ManualApprovalStep("PromoteToProd")    
+        ])
     
     def createrole(self):
         role=aws_iam.Role(self,"pipeline-role",
