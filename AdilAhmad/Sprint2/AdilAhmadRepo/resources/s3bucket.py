@@ -8,3 +8,6 @@ class S3Bucket:
 
     def load(self, key):
         return json.load(self.bucket.Object(key=key).get()["Body"])
+        
+    def dump(self, key, obj):
+        return self.bucket.Object(key=key).put(Body=json.dumps(obj))
