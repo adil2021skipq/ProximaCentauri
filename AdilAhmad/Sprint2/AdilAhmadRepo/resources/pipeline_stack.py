@@ -29,13 +29,13 @@ class MyPipelineStack(core.Stack):
         beta = Pipeline_Stage(self, "Beta",
         env={
             "account":"315997497220",
-            "region":"us-west-2"
+            "region":"us-east-2"
         })
         
         prod = Pipeline_Stage(self, "Prod",
         env={
             "account":"315997497220",
-            "region":"us-west-2"
+            "region":"us-east-2"
         })
         
         # unit_test = pipelines.ShellStep("unit_test",
