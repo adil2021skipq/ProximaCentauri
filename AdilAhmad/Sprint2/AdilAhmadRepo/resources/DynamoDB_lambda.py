@@ -7,9 +7,9 @@ def lambda_handler(event, context):
     time = event['Records'][0]['Sns']['Timestamp']
     alarmName = event['Records'][0]['Sns']['Subject']
     if message[0]=="B":
-      table_name="Beta-adil-skip-stack-TableCD117FA1-AAV1AQC91TB1"
+      table_name="Beta-adil-stack-TableCD117FA1-1CNNXBI02HQ4P"
     else:
-        table_name="Prod-adil-skip-stack-TableCD117FA1-129QCNZI6QH1U"
+        table_name="Prod-adil-stack-TableCD117FA1-T0EY58VIK07E"
     db.put_item(TableName=table_name, Item={
         'id':{'S':message},
         'createdDate':{'S':time},
