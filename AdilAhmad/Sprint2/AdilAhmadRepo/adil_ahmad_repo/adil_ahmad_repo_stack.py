@@ -30,89 +30,89 @@ class AdilAhmadRepoStack(cdk.Stack):
         rule=events_.Rule(self, "webhealth_Invocation", description="Periodic Lambda", enabled=True, schedule=lambda_schedule, targets=[lambda_targets])
         
         # d = boto3.client("dynamodb")
-        # dnm = boto3.resource("dynamodb")
+        dnm = boto3.resource("dynamodb")
         # response=d.list_tables()
         # if ("AdilAhmadAlarmTable" in response["TableNames"]):
-        # dynamo_table=dnm.Table('AdilAhmadAlarmTable')
+        dynamo_table=self.create_table()
         # else:
         # dynamo_table=self.create_table()
+        dynamo_table.grant_read_write_data(DBlambda)
+        # topic = sns.Topic(self, "WebHealthTopic")
+        # topic.add_subscription(subscriptions_.EmailSubscription(email_address="adil.ahmad.s@skipq.org"))
+        # topic.add_subscription(subscriptions_.LambdaSubscription(fn=DBlambda))
         
-        topic = sns.Topic(self, "WebHealthTopic")
-        topic.add_subscription(subscriptions_.EmailSubscription(email_address="adil.ahmad.s@skipq.org"))
-        topic.add_subscription(subscriptions_.LambdaSubscription(fn=DBlambda))
+        # ### TO CREATE THE BUCKET ###
         
-        ### TO CREATE THE BUCKET ###
+        # bucket = s3_.Bucket(self, id="AdilBucket", bucket_name="adilbucket")
+        # s3 = boto3.resource('s3')
+        # object = s3.Object('adilbucket','urls.json')
+        # response = object.put(Body=json.dumps({
+        #         "URLS": [
+        #     {
+        #     "FACEBOOK": "www.facebook.com",
+        #     "TWITTER": "www.twitter.com",
+        #     "ESPNCRICINFO": "www.espncricinfo.com",
+        #     "REDDIT": "www.reddit.com",
+        #     }
+        # ]
+        # }))
+        # URLS = s3b('adilbucket').load('urls.json')
+        # K=list(URLS['URLS'][0].keys())
         
-        bucket = s3_.Bucket(self, id="AdilBucket", bucket_name="adilbucket")
-        s3 = boto3.resource('s3')
-        object = s3.Object('adilbucket','urls.json')
-        response = object.put(Body=json.dumps({
-                "URLS": [
-            {
-            "FACEBOOK": "www.facebook.com",
-            "TWITTER": "www.twitter.com",
-            "ESPNCRICINFO": "www.espncricinfo.com",
-            "REDDIT": "www.reddit.com",
-            }
-        ]
-        }))
-        URLS = s3b('adilbucket').load('urls.json')
-        K=list(URLS['URLS'][0].keys())
+        # availability_metric = []
+        # latency_metric = []
         
-        availability_metric = []
-        latency_metric = []
-        
-        for i in range(len(K)):
+        # for i in range(len(K)):
             
-            dimensions = {'URL': URLS['URLS'][0][K[i]]}
-            availability_metric.append(
-                                cloudwatch_.Metric(namespace = constants.URL_MONITOR_NAMESPACE,
-                                metric_name=constants.URL_MONITOR_NAME_AVAILABILITY,
-                                dimensions_map = dimensions,
-                                period = cdk.Duration.minutes(5),
-                                label = f'{K[i]} Availability Metric')
-                                )
+        #     dimensions = {'URL': URLS['URLS'][0][K[i]]}
+        #     availability_metric.append(
+        #                         cloudwatch_.Metric(namespace = constants.URL_MONITOR_NAMESPACE,
+        #                         metric_name=constants.URL_MONITOR_NAME_AVAILABILITY,
+        #                         dimensions_map = dimensions,
+        #                         period = cdk.Duration.minutes(5),
+        #                         label = f'{K[i]} Availability Metric')
+        #                         )
                         
-            latency_metric.append(
-                                cloudwatch_.Metric(namespace = constants.URL_MONITOR_NAMESPACE,
-                                metric_name=constants.URL_MONITOR_NAME_LATENCY,
-                                dimensions_map = dimensions,
-                                period = cdk.Duration.minutes(1),
-                                label = f'{K[i]} Latency Metric')
-                                )
+        #     latency_metric.append(
+        #                         cloudwatch_.Metric(namespace = constants.URL_MONITOR_NAMESPACE,
+        #                         metric_name=constants.URL_MONITOR_NAME_LATENCY,
+        #                         dimensions_map = dimensions,
+        #                         period = cdk.Duration.minutes(1),
+        #                         label = f'{K[i]} Latency Metric')
+        #                         )
 
-        availability_alarm = []
-        latency_alarm = []
+        # availability_alarm = []
+        # latency_alarm = []
         
-        for i in range(len(K)):
+        # for i in range(len(K)):
             
-            availability_alarm.append(
-                                    cloudwatch_.Alarm(self, 
-                                    id = f'Adil Ahmad_{K[i]}_Availability_Alarm',
-                                    alarm_description = f"Alarm to monitor availability of {K[i]}",
-                                    alarm_name = f'Adil Ahmad {K[i]} Availability Alarm',
-                                    metric = availability_metric[i],
-                                    comparison_operator =cloudwatch_.ComparisonOperator.LESS_THAN_THRESHOLD,
-                                    datapoints_to_alarm = 1,
-                                    evaluation_periods = 1,
-                                    threshold = 1)
-                                    )
+        #     availability_alarm.append(
+        #                             cloudwatch_.Alarm(self, 
+        #                             id = f'Adil Ahmad_{K[i]}_Availability_Alarm',
+        #                             alarm_description = f"Alarm to monitor availability of {K[i]}",
+        #                             alarm_name = f'Adil Ahmad {K[i]} Availability Alarm',
+        #                             metric = availability_metric[i],
+        #                             comparison_operator =cloudwatch_.ComparisonOperator.LESS_THAN_THRESHOLD,
+        #                             datapoints_to_alarm = 1,
+        #                             evaluation_periods = 1,
+        #                             threshold = 1)
+        #                             )
                                     
-            latency_alarm.append(
-                                    cloudwatch_.Alarm(self, 
-                                    id = f'Adil Ahmad_{K[i]}_Latency_Alarm',
-                                    alarm_description = f"Alarm to monitor latency of {K[i]}",
-                                    alarm_name = f'Adil Ahmad {K[i]} Latency Alarm',
-                                    metric = latency_metric[i],
-                                    comparison_operator =cloudwatch_.ComparisonOperator.GREATER_THAN_THRESHOLD,
-                                    datapoints_to_alarm = 1,
-                                    evaluation_periods = 1,
-                                    threshold = 0.245)
-                                )
-        for i in range(len(K)):
+        #     latency_alarm.append(
+        #                             cloudwatch_.Alarm(self, 
+        #                             id = f'Adil Ahmad_{K[i]}_Latency_Alarm',
+        #                             alarm_description = f"Alarm to monitor latency of {K[i]}",
+        #                             alarm_name = f'Adil Ahmad {K[i]} Latency Alarm',
+        #                             metric = latency_metric[i],
+        #                             comparison_operator =cloudwatch_.ComparisonOperator.GREATER_THAN_THRESHOLD,
+        #                             datapoints_to_alarm = 1,
+        #                             evaluation_periods = 1,
+        #                             threshold = 0.245)
+        #                         )
+        # for i in range(len(K)):
             
-            availability_alarm[i].add_alarm_action(cw_actions.SnsAction(topic))
-            latency_alarm[i].add_alarm_action(cw_actions.SnsAction(topic))
+        #     availability_alarm[i].add_alarm_action(cw_actions.SnsAction(topic))
+        #     latency_alarm[i].add_alarm_action(cw_actions.SnsAction(topic))
         
     def create_lambda_role(self):
         lambdaRole = aws_iam.Role(self, "lambda-role-db",
