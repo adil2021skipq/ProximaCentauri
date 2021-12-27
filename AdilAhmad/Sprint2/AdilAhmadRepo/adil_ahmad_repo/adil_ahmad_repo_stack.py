@@ -141,8 +141,7 @@ class AdilAhmadRepoStack(cdk.Stack):
         
     def create_table(self):
         return db.Table(self, 
-        id="Table", 
-        table_name="AdilAhmadAlarmTable", 
+        id="Table",
         partition_key=db.Attribute(name="id", type=db.AttributeType.STRING),
         sort_key=db.Attribute(name="createdDate", type=db.AttributeType.STRING)
         )
