@@ -43,7 +43,7 @@ class AdilAhmadRepoStack(cdk.Stack):
         topic.add_subscription(subscriptions_.LambdaSubscription(fn=DBlambda))
         
         
-        bucket = s3_.Bucket(self, id="AdilBucket", bucket_name="adilbucket")
+        # bucket = s3_.Bucket(self, id="AdilBucket", bucket_name="adilbucket")
         # s3 = boto3.resource('s3')
         # object = s3.Object('adilbucket','urls.json')
         # response = object.put(Body=json.dumps({

@@ -43,7 +43,7 @@ class MyPipelineStack(core.Stack):
         # )
         
         unit_test = pipelines.CodeBuildStep('unit_test',
-        commands=["cd AdilAhmad/Sprint2/AdilAhmadRepo","pip install -r requirements.txt", "pytest unit", "pytest integ"],
+        commands=["cd AdilAhmad/Sprint2/AdilAhmadRepo","pip install -r requirements.txt", "npm install -g aws-cdk", "pytest unit", "pytest integ"],
         role=pipelineroles
         )
         
