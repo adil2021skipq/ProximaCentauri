@@ -12,6 +12,8 @@ from aws_cdk import (
     aws_s3 as s3_,
     aws_s3_notifications as s3n,
     aws_sqs as sqs_,
+    aws_codedeploy as codedeploy,
+    
 )
 from resources import constants as constants
 import boto3, json
@@ -111,6 +113,14 @@ class AdilAhmadRepoStack(cdk.Stack):
             
             availability_alarm[i].add_alarm_action(cw_actions.SnsAction(topic))
             latency_alarm[i].add_alarm_action(cw_actions.SnsAction(topic))
+            
+        metricduration = cloudwatch_.Metric(namespace="AWS/Lambda", metric_name="Duration", 
+            dimensions_map={"FunctionName": DBlambda.function_name})
+        failure_alarm = cloudwatch_.Alarm(self, "DurationAlarm", metric=metricduration, threshold = 700,
+            comparison_operator= cloudwatch_.ComparisonOperator.GREATER_THAN_THRESHOLD,
+            evaluation_periods=1)
+        alias = lambda_.alias(self, "AdilAlias "+construct_id, alias_name="AdilAlias", version=DBlambda.current_version)
+        codedeploy.LambdaDeploymentConfig(self, "AdilID", alias=alias, alarms=[failure_alarm])
         
     def create_lambda_role(self):
         lambdaRole = aws_iam.Role(self, "lambda-role-db",
