@@ -89,7 +89,7 @@ class AdilAhmadRepoStack(cdk.Stack):
             availability_alarm.append(
                                     cloudwatch_.Alarm(self, 
                                     id = f'Adil Ahmad_{K[i]}_Availability_Alarm',
-                                    alarm_description = f"Alarm to monitor availability of {K[i]}"
+                                    alarm_description = f"Alarm to monitor availability of {K[i]}",
                                     metric = availability_metric[i],
                                     comparison_operator =cloudwatch_.ComparisonOperator.LESS_THAN_THRESHOLD,
                                     datapoints_to_alarm = 1,
@@ -100,7 +100,7 @@ class AdilAhmadRepoStack(cdk.Stack):
             latency_alarm.append(
                                     cloudwatch_.Alarm(self, 
                                     id = f'Adil Ahmad_{K[i]}_Latency_Alarm',
-                                    alarm_description = f"Alarm to monitor latency of {K[i]}"
+                                    alarm_description = f"Alarm to monitor latency of {K[i]}",
                                     metric = latency_metric[i],
                                     comparison_operator =cloudwatch_.ComparisonOperator.GREATER_THAN_THRESHOLD,
                                     datapoints_to_alarm = 1,
