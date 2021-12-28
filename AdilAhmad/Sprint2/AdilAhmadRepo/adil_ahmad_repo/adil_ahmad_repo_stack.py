@@ -119,7 +119,7 @@ class AdilAhmadRepoStack(cdk.Stack):
         failure_alarm = cloudwatch_.Alarm(self, "DurationAlarm", metric=metricduration, threshold = 700,
             comparison_operator= cloudwatch_.ComparisonOperator.GREATER_THAN_THRESHOLD,
             evaluation_periods=1)
-        alias = lambda_.alias(self, "AdilAlias "+construct_id, alias_name="AdilAlias", version=DBlambda.current_version)
+        alias = lambda_.Alias(self, "AdilAlias "+construct_id, alias_name="AdilAlias", version=DBlambda.current_version)
         codedeploy.LambdaDeploymentConfig(self, "AdilID", alias=alias, alarms=[failure_alarm])
         
     def create_lambda_role(self):
