@@ -39,8 +39,9 @@ class AdilAhmadRepoStack(cdk.Stack):
         # else:
         
         
-        # dynamo_table=self.create_table()
-        # dynamo_table.grant_read_write_data(DBlambda)
+        dynamo_table=self.create_table()
+        dynamo_table.grant_read_write_data(DBlambda)
+        DBlambda.add_environment('table_name', dynamo_table.table_name)
 
         topic = sns.Topic(self, "WebHealthTopic")
         topic.add_subscription(subscriptions_.EmailSubscription(email_address="adil.ahmad.s@skipq.org"))
@@ -128,7 +129,6 @@ class AdilAhmadRepoStack(cdk.Stack):
         DBalias = lambda_.Alias(self, id = "AdilAlias "+construct_id, alias_name="AdilAlias", version=DBlambda.current_version)
         codedeploy.LambdaDeploymentGroup(self, "AdilID", alias=DBalias, alarms=[failure_alarm])
         
-        DBlambda.add_environment('table_name', dynamo_table.table_name)
         
     def create_lambda_role(self):
         lambdaRole = aws_iam.Role(self, "lambda-role-db",
