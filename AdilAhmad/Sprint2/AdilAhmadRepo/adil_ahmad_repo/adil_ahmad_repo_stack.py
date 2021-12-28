@@ -120,7 +120,8 @@ class AdilAhmadRepoStack(cdk.Stack):
             comparison_operator= cloudwatch_.ComparisonOperator.GREATER_THAN_THRESHOLD,
             evaluation_periods=1)
         alias = lambda_.Alias(self, "AdilAlias "+construct_id, alias_name="AdilAlias", version=DBlambda.current_version)
-        codedeploy.LambdaDeploymentGroup(self, "AdilID", alias=alias, alarms=[failure_alarm])
+        codedeploy.LambdaDeploymentGroup(self, "AdilID", alias=alias, alarms=[failure_alarm],
+        deployment_config=codedeploy.LambdaDeploymentConfig.LINEAR_10_PERCENT_EVERY_1_MINUTE)
         
     def create_lambda_role(self):
         lambdaRole = aws_iam.Role(self, "lambda-role-db",
