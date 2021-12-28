@@ -50,18 +50,18 @@ class AdilAhmadRepoStack(cdk.Stack):
         # bucket = s3_.Bucket(self, id="AdilBucket")
         
         
-        s3 = boto3.resource('s3')
-        object = s3.Object('adilbucket','urls.json')
-        response = object.put(Body=json.dumps({
-                "URLS": [
-            {
-            "FACEBOOK": "www.facebook.com",
-            "TWITTER": "www.twitter.com",
-            "ESPNCRICINFO": "www.espncricinfo.com",
-            "REDDIT": "www.reddit.com",
-            }
-        ]
-        }))
+        # s3 = boto3.resource('s3')
+        # object = s3.Object('adilbucket','urls.json')
+        # response = object.put(Body=json.dumps({
+        #         "URLS": [
+        #     {
+        #     "FACEBOOK": "www.facebook.com",
+        #     "TWITTER": "www.twitter.com",
+        #     "ESPNCRICINFO": "www.espncricinfo.com",
+        #     "REDDIT": "www.reddit.com",
+        #     }
+        # ]
+        # }))
         
         
         URLS = s3b('beta-adil2-stack-adilbucketd08c6c2a-hv2jjjpyare0').load('urls.json')
