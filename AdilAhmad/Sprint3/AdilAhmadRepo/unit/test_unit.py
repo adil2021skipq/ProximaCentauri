@@ -12,5 +12,9 @@ def test_lambda():
     assert len(functions) >= 2
     
 def test_alarms():
+    app = core.App()
+    
+    AdilAhmadRepoStack(app, "Stack")
+    template = app.synth().get_stack_by_name("Stack").template
     functions= [resource for resource in template['Resources'].values() if resource['Type']=='AWS::CloudWatch::Alarm']
     assert len(functions) >= 3
