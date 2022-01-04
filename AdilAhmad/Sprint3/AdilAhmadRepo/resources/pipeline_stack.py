@@ -20,7 +20,7 @@ class MyPipelineStack(core.Stack):
         
         synth = pipelines.CodeBuildStep('synth',input=source,
         commands=["cd AdilAhmad/Sprint3/AdilAhmadRepo","pip install -r requirements.txt", "npm install -g aws-cdk", "cdk synth"],
-        primary_output_directory="AdilAhmad/Sprint2/AdilAhmadRepo/cdk.out",
+        primary_output_directory="AdilAhmad/Sprint3/AdilAhmadRepo/cdk.out",
         role=pipelineroles
         )
         
