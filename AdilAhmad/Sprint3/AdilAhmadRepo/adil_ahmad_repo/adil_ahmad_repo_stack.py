@@ -77,7 +77,7 @@ class AdilAhmadRepoStack(cdk.Stack):
         K=list(URLS['URLS'][0].keys())
         
         myapi=apigateway.LambdaRestApi(self,"Adil_Ahmad_API"+ construct_id,handler=apilambda)
-        apilambda.add_environment(key = 'table_name', value = urls_table.table_name)
+        apilambda.add_environment(key = 'api_table', value = myapi.table_name)
         
         apilambda.grant_invoke( aws_iam.ServicePrincipal("apigateway.amazonaws.com"))
         urls_table.grant_read_write_data(apilambda) 

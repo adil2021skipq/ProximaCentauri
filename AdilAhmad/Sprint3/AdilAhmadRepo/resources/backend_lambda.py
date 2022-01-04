@@ -9,7 +9,7 @@ def lambda_handler(events, context):
     
     URLS= s3b('beta-adil2-stack-adilbucketd08c6c2a-10et96l0lbo8q').load('urls.json')
     
-    urltable = os.getenv(key = 'table_name')
+    urltable = os.getenv(key = 'api_table')
     
     for link in URLS:
         db.put_item(TableName = urltable,Item=
