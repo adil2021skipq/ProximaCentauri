@@ -1,4 +1,4 @@
-import boto3
+import boto3, os
 
 
 def lambda_handler(event, context):
@@ -6,7 +6,7 @@ def lambda_handler(event, context):
     message = event['Records'][0]['Sns']['MessageId']
     time = event['Records'][0]['Sns']['Timestamp']
     alarmName = event['Records'][0]['Sns']['Subject']
-    table_name=os.getenv('table_name')
+    table_name=os.getenv("table_name")
     db.put_item(TableName=table_name, Item={
         'id':{'S':message},
         'createdDate':{'S':time},
