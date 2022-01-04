@@ -11,6 +11,6 @@ def test_lambda():
     
     assert len(functions) >= 2
     
-# def test_alarms():
-#     functions= [resource for resource in template['Resources'].values() if resource['Type']=='AWS::CloudWatch::Alarm']
-#     assert len(functions) >= 3
+def test_alarms():
+    functions= [resource for resource in template['Resources'].values() if resource['Type']=='AWS::CloudWatch::Alarm']
+    assert len(functions) >= 3

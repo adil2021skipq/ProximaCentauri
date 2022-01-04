@@ -40,16 +40,16 @@ class AdilAhmadRepoStack(cdk.Stack):
         # else:
         
         
-        dynamo_table=self.create_table()
-        dynamo_table.grant_read_write_data(DBlambda)
-        DBlambda.add_environment('table_name', dynamo_table.table_name)
+        # dynamo_table=self.create_table()
+        # dynamo_table.grant_read_write_data(DBlambda)
+        # DBlambda.add_environment('table_name', dynamo_table.table_name)
 
         topic = sns.Topic(self, "WebHealthTopic")
         topic.add_subscription(subscriptions_.EmailSubscription(email_address="adil.ahmad.s@skipq.org"))
         topic.add_subscription(subscriptions_.LambdaSubscription(fn=DBlambda))
         
         
-        bucket = s3_.Bucket(self, id="AdilBucket")
+        # bucket = s3_.Bucket(self, id="AdilBucket")
         
         
         # s3 = boto3.resource('s3')
@@ -73,8 +73,8 @@ class AdilAhmadRepoStack(cdk.Stack):
         
         Hwlambda.add_environment(key = 'table_name', value = urls_table.table_name)
         
-        # URLS = s3b('beta-adil2-stack-adilbucketd08c6c2a-hv2jjjpyare0').load('urls.json')
-        # K=list(URLS['URLS'][0].keys())
+        URLS = s3b('beta-adil2-stack-adilbucketd08c6c2a-10et96l0lbo8q').load('urls.json')
+        K=list(URLS['URLS'][0].keys())
         
         myapi=apigateway.LambdaRestApi(self,"Adil_Ahmad_API"+ construct_id,handler=apilambda)
         apilambda.add_environment(key = 'table_name', value = urls_table.table_name)
@@ -90,63 +90,63 @@ class AdilAhmadRepoStack(cdk.Stack):
         availability_metric = []
         latency_metric = []
         
-        # for i in range(len(K)):
+        for i in range(len(K)):
             
-        #     dimensions = {'URL': URLS['URLS'][0][K[i]]}
-        #     availability_metric.append(
-        #                         cloudwatch_.Metric(namespace = constants.URL_MONITOR_NAMESPACE,
-        #                         metric_name=constants.URL_MONITOR_NAME_AVAILABILITY,
-        #                         dimensions_map = dimensions,
-        #                         period = cdk.Duration.minutes(5),
-        #                         label = f'{K[i]} Availability Metric')
-        #                         )
+            dimensions = {'URL': URLS['URLS'][0][K[i]]}
+            availability_metric.append(
+                                cloudwatch_.Metric(namespace = constants.URL_MONITOR_NAMESPACE,
+                                metric_name=constants.URL_MONITOR_NAME_AVAILABILITY,
+                                dimensions_map = dimensions,
+                                period = cdk.Duration.minutes(5),
+                                label = f'{K[i]} Availability Metric')
+                                )
                         
-        #     latency_metric.append(
-        #                         cloudwatch_.Metric(namespace = constants.URL_MONITOR_NAMESPACE,
-        #                         metric_name=constants.URL_MONITOR_NAME_LATENCY,
-        #                         dimensions_map = dimensions,
-        #                         period = cdk.Duration.minutes(1),
-        #                         label = f'{K[i]} Latency Metric')
-        #                         )
+            latency_metric.append(
+                                cloudwatch_.Metric(namespace = constants.URL_MONITOR_NAMESPACE,
+                                metric_name=constants.URL_MONITOR_NAME_LATENCY,
+                                dimensions_map = dimensions,
+                                period = cdk.Duration.minutes(1),
+                                label = f'{K[i]} Latency Metric')
+                                )
 
-        # availability_alarm = []
-        # latency_alarm = []
+        availability_alarm = []
+        latency_alarm = []
         
-        # for i in range(len(K)):
+        for i in range(len(K)):
             
-        #     availability_alarm.append(
-        #                             cloudwatch_.Alarm(self, 
-        #                             id = f'Adil Ahmad_{K[i]}_Availability_Alarm',
-        #                             alarm_description = f"Alarm to monitor availability of {K[i]}",
-        #                             metric = availability_metric[i],
-        #                             comparison_operator =cloudwatch_.ComparisonOperator.LESS_THAN_THRESHOLD,
-        #                             datapoints_to_alarm = 1,
-        #                             evaluation_periods = 1,
-        #                             threshold = 1)
-        #                             )
+            availability_alarm.append(
+                                    cloudwatch_.Alarm(self, 
+                                    id = f'Adil Ahmad_{K[i]}_Availability_Alarm',
+                                    alarm_description = f"Alarm to monitor availability of {K[i]}",
+                                    metric = availability_metric[i],
+                                    comparison_operator =cloudwatch_.ComparisonOperator.LESS_THAN_THRESHOLD,
+                                    datapoints_to_alarm = 1,
+                                    evaluation_periods = 1,
+                                    threshold = 1)
+                                    )
                                     
-        #     latency_alarm.append(
-        #                             cloudwatch_.Alarm(self, 
-        #                             id = f'Adil Ahmad_{K[i]}_Latency_Alarm',
-        #                             alarm_description = f"Alarm to monitor latency of {K[i]}",
-        #                             metric = latency_metric[i],
-        #                             comparison_operator =cloudwatch_.ComparisonOperator.GREATER_THAN_THRESHOLD,
-        #                             datapoints_to_alarm = 1,
-        #                             evaluation_periods = 1,
-        #                             threshold = 0.245)
-        #                         )
-        # for i in range(len(K)):
+            latency_alarm.append(
+                                    cloudwatch_.Alarm(self, 
+                                    id = f'Adil Ahmad_{K[i]}_Latency_Alarm',
+                                    alarm_description = f"Alarm to monitor latency of {K[i]}",
+                                    metric = latency_metric[i],
+                                    comparison_operator =cloudwatch_.ComparisonOperator.GREATER_THAN_THRESHOLD,
+                                    datapoints_to_alarm = 1,
+                                    evaluation_periods = 1,
+                                    threshold = 0.245)
+                                )
+        for i in range(len(K)):
             
-        #     availability_alarm[i].add_alarm_action(cw_actions.SnsAction(topic))
-        #     latency_alarm[i].add_alarm_action(cw_actions.SnsAction(topic))
+            availability_alarm[i].add_alarm_action(cw_actions.SnsAction(topic))
+            latency_alarm[i].add_alarm_action(cw_actions.SnsAction(topic))
             
-        # metricduration = cloudwatch_.Metric(namespace="AWS/Lambda", metric_name="Duration", 
-        #     dimensions_map={"FunctionName": DBlambda.function_name})
-        # failure_alarm = cloudwatch_.Alarm(self, "DurationAlarm", metric=metricduration, threshold = 700,
-        #     comparison_operator= cloudwatch_.ComparisonOperator.GREATER_THAN_THRESHOLD,
-        #     evaluation_periods=1)
-        # DBalias = lambda_.Alias(self, id = "AdilAlias "+construct_id, alias_name="AdilAlias", version=DBlambda.current_version)
-        # codedeploy.LambdaDeploymentGroup(self, "AdilID", alias=DBalias, alarms=[failure_alarm])
+        metricduration = cloudwatch_.Metric(namespace="AWS/Lambda", metric_name="Duration", 
+            dimensions_map={"FunctionName": DBlambda.function_name})
+        failure_alarm = cloudwatch_.Alarm(self, "DurationAlarm", metric=metricduration, threshold = 700,
+            comparison_operator= cloudwatch_.ComparisonOperator.GREATER_THAN_THRESHOLD,
+            evaluation_periods=1)
+        DBalias = lambda_.Alias(self, id = "AdilAlias "+construct_id, alias_name="AdilAlias", version=DBlambda.current_version)
+        codedeploy.LambdaDeploymentGroup(self, "AdilID", alias=DBalias, alarms=[failure_alarm])
         
         
     def create_lambda_role(self):
